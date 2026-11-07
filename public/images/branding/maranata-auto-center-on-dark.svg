@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 210" role="img" aria-labelledby="title description">
+  <title id="title">Maranata Auto Center</title>
+  <desc id="description">Logomarca Maranata em vermelho e azul claro, com símbolo de peixe e texto Auto Center.</desc>
+  <g transform="skewX(-8)">
+    <text x="34" y="142" fill="#ef4a51" font-family="Arial, Helvetica, sans-serif" font-size="142" font-style="italic" font-weight="900" letter-spacing="-18">M</text>
+    <text x="158" y="142" fill="#9ebcff" font-family="Arial, Helvetica, sans-serif" font-size="108" font-style="italic" font-weight="700" letter-spacing="-5">aranata</text>
+  </g>
+  <g fill="none" stroke="#9ebcff" stroke-linecap="round" stroke-linejoin="round" stroke-width="6">
+    <path d="M210 173c28-27 64-27 91 0-27 27-63 27-91 0Z"/>
+    <path d="m210 173-28-20m28 20-28 20"/>
+  </g>
+  <text x="320" y="197" fill="#9ebcff" font-family="Arial, Helvetica, sans-serif" font-size="55" font-style="italic" font-weight="700" letter-spacing="2">AUTO CENTER</text>
+</svg>

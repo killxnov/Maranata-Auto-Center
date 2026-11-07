@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Peixinho da Maranata Auto Center">
+  <path d="M19 32C29 20 43 20 53 32 43 44 29 44 19 32Z" fill="none" stroke="#27468f" stroke-linecap="round" stroke-linejoin="round" stroke-width="5"/>
+  <path d="M19 32 7 21M19 32 7 43" fill="none" stroke="#d52b35" stroke-linecap="round" stroke-linejoin="round" stroke-width="5"/>
+  <circle cx="44" cy="29" r="2.5" fill="#27468f"/>
+</svg>

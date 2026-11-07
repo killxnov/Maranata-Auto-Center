@@ -1,0 +1,32 @@
+:root {
+  --color-navy: #16181b;
+  --color-navy-deep: #08090a;
+  --color-blue: #1d4266;
+  --color-paper: #0b0c0e;
+  --color-surface: #181a1e;
+  --color-accent: #ff8e94;
+  --color-white: #ffffff;
+  --color-ink: #edf2f8;
+  --color-muted: #a5b2c4;
+  --color-line: #273447;
+  --color-red: #b62f36;
+  --color-red-hover: #98272d;
+  --color-whatsapp: #166c43;
+  --space-section: clamp(4.5rem, 8vw, 8rem);
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --shadow-soft: 0 12px 40px rgb(10 22 38 / 7%);
+  --transition: 220ms ease;
+}
+@theme inline {
+  --color-navy: var(--color-navy);
+  --color-paper: var(--color-paper);
+  --color-ink: var(--color-ink);
+  --color-muted: var(--color-muted);
+  --color-brand-red: var(--color-red);
+  --color-surface: var(--color-surface);
+  --color-accent: var(--color-accent);
+  --font-sans: var(--font-body);
+  --font-display: var(--font-heading);
+  --breakpoint-xs: 24rem;
+}
