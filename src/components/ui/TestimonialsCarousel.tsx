@@ -1,15 +1,11 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { TestimonialCard } from "./TestimonialCard";
-import { testimonialsConfig } from "@/data/testimonials";
 import type { Testimonial } from "@/types/testimonial";
 export function TestimonialsCarousel({ reviews }: { reviews: Testimonial[] }) {
-  const [touchPaused, setTouchPaused] = useState(false);
-  const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const focusFrame = useRef(0);
   useEffect(
     () => () => {
-      clearTimeout(timer.current);
       cancelAnimationFrame(focusFrame.current);
     },
     [],
@@ -17,17 +13,8 @@ export function TestimonialsCarousel({ reviews }: { reviews: Testimonial[] }) {
   // Repete apenas os mesmos depoimentos locais para preencher um período do looping.
   const repetitions = Math.max(1, Math.ceil(2560 / (reviews.length * 344)));
   const entries = Array.from({ length: repetitions }, () => reviews).flat();
-  function touchStart(type: string) {
-    if (type === "mouse") return;
-    clearTimeout(timer.current);
-    setTouchPaused(true);
-  }
-  function touchEnd(type: string) {
-    if (type === "mouse") return;
-    timer.current = setTimeout(() => setTouchPaused(false), testimonialsConfig.touchPauseMs);
-  }
   return (
-    <div className={`testimonials-carousel ${touchPaused ? "testimonials-paused" : ""}`}>
+    <div className="testimonials-carousel">
       <div
         className="testimonials-window"
         role="region"
@@ -60,9 +47,6 @@ export function TestimonialsCarousel({ reviews }: { reviews: Testimonial[] }) {
               );
           });
         }}
-        onPointerDown={(event) => touchStart(event.pointerType)}
-        onPointerUp={(event) => touchEnd(event.pointerType)}
-        onPointerCancel={(event) => touchEnd(event.pointerType)}
       >
         <div
           className="testimonials-track"

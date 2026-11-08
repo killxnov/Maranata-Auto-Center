@@ -45,7 +45,8 @@ export function SectionTransitions() {
               });
               timeline.fromTo(
                 targets,
-                { y: brands ? 14 : motion.scene.enter, opacity: brands ? 1 : 0.55 },
+                // Keep footer text contrast while preserving its scroll translation.
+                { y: brands ? 14 : motion.scene.enter, opacity: brands || footer ? 1 : 0.55 },
                 { y: 0, opacity: 1, duration: footer ? 1 : 0.24, ease: "none" },
                 0,
               );

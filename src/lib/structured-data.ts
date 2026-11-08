@@ -7,10 +7,13 @@ export function getStructuredData() {
   return {
     "@context": "https://schema.org",
     "@type": "AutoRepair",
+    "@id": `${siteConfig.url}/#business`,
     name: siteConfig.name,
     address: {
       "@type": "PostalAddress",
       streetAddress: siteConfig.address.street,
+      // PostalAddress has no neighborhood property; keep it in the postal address.
+      extendedAddress: siteConfig.address.neighborhood,
       addressLocality: siteConfig.address.city,
       addressRegion: siteConfig.address.region,
       postalCode: siteConfig.address.postalCode,

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { siteConfig } from "@/config/site.config";
 import { seoConfig } from "@/config/seo.config";
+import { allowsIndexing } from "./indexing";
 export const metadata: Metadata = {
   title: seoConfig.title,
   description: seoConfig.description,
@@ -28,5 +29,10 @@ export const metadata: Metadata = {
     title: seoConfig.title,
     description: seoConfig.description,
   },
-  robots: siteConfig.url ? { index: true, follow: true } : { index: false, follow: false },
+  robots: allowsIndexing(process.env, siteConfig.url)
+    ? { index: true, follow: true }
+    : { index: false, follow: false },
+  ...(process.env.GOOGLE_SITE_VERIFICATION?.trim()
+    ? { verification: { google: process.env.GOOGLE_SITE_VERIFICATION.trim() } }
+    : {}),
 };

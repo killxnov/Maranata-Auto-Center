@@ -108,14 +108,24 @@ test("formulário valida e prepara WhatsApp oficial sem contato real", async ({ 
   await expect.poll(() => outbound.length).toBe(2);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 });
-test("SEO local, JSON-LD e rotas técnicas sem domínio fictício", async ({ page, request }) => {
+test("SEO local, JSON-LD e rotas técnicas de produção", async ({ page, request }) => {
   await page.goto("/");
-  await expect(page).toHaveTitle("Maranata Auto Center");
+  await expect(page).toHaveTitle("Maranata Auto Center | Oficina Mecânica em Porto Alegre");
   await expect(page.locator("html")).toHaveAttribute("lang", "pt-BR");
   await expect(page.locator('meta[name="description"]')).toHaveAttribute("content", /Porto Alegre/);
-  await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
-  await expect(page.locator('link[rel="canonical"]')).toHaveCount(0);
-  await expect(page.locator('meta[property="og:image"]')).toHaveCount(0);
+  await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", "index, follow");
+  const response = await request.get("/");
+  expect(response.status()).toBe(200);
+  expect(response.headers()["x-robots-tag"] || "").not.toMatch(/noindex|nofollow/);
+  expect(await response.text()).toContain('<meta name="robots" content="index, follow"');
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
+    "href",
+    "https://maranata-autocenter.vercel.app",
+  );
+  await expect(page.locator('meta[property="og:image"]')).toHaveAttribute(
+    "content",
+    /https:\/\/maranata-autocenter.vercel.app\/opengraph-image/,
+  );
   const schema = JSON.parse(await page.locator('script[type="application/ld+json"]').innerText());
   expect(schema["@type"]).toBe("AutoRepair");
   expect(schema.address.postalCode).toBe("91110-420");
@@ -123,11 +133,25 @@ test("SEO local, JSON-LD e rotas técnicas sem domínio fictício", async ({ pag
   expect(schema.openingHoursSpecification.opens).toBe("08:00");
   expect(schema.openingHoursSpecification.closes).toBe("18:00");
   expect(schema.openingHoursSpecification.dayOfWeek).toHaveLength(5);
-  for (const property of ["url", "geo", "aggregateRating", "review"])
+  expect(schema.url).toBe("https://maranata-autocenter.vercel.app");
+  expect(schema["@id"]).toBe(`${schema.url}/#business`);
+  expect(schema.address.extendedAddress).toBe("Sarandi");
+  for (const property of ["geo", "aggregateRating", "review"])
     expect(schema[property]).toBeUndefined();
   expect((await request.get("/robots.txt")).status()).toBe(200);
-  expect(await (await request.get("/robots.txt")).text()).toContain("Disallow: /");
+  expect(await (await request.get("/robots.txt")).text()).toContain("Allow: /");
   expect((await request.get("/sitemap.xml")).status()).toBe(200);
+  const xml = await (await request.get("/sitemap.xml")).text();
+  const urls = [...xml.matchAll(/<loc>(.*?)<\/loc>/g)].map((match) => match[1]);
+  expect(urls).toHaveLength(4);
+  expect(new Set(urls).size).toBe(4);
+  for (const url of urls) {
+    const parsed = new URL(url);
+    expect(parsed.origin).toBe(schema.url);
+    const route = await request.get(parsed.pathname);
+    expect(route.status()).toBe(200);
+    expect(await route.text()).not.toContain('content="noindex');
+  }
   const og = await request.get("/opengraph-image");
   expect(og.status()).toBe(200);
   expect(og.headers()["content-type"]).toContain("image/png");

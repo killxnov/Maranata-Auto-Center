@@ -19,7 +19,7 @@ export const siteConfig = {
     name: "Daniel Batista dos Santos",
     url: "https://github.com/killxnov",
   },
-  url: getSiteUrl(configuredUrl),
+  url: getSiteUrl(configuredUrl) || "https://maranata-autocenter.vercel.app",
   whatsappNumber,
   phoneDisplay: formatPhone(whatsappNumber),
   address: {

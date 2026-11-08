@@ -140,7 +140,7 @@ test("avaliações locais sem API, páginas legais e crédito funcionam", async 
   }
 });
 
-test("avaliações pausam sem reiniciar e não interferem nas marcas", async ({ page }) => {
+test("avaliações continuam sem pausar e não interferem nas marcas", async ({ page }) => {
   await page.goto("/#avaliacoes");
   const window = page.locator(".testimonials-window");
   const track = page.locator(".testimonials-track");
@@ -148,15 +148,12 @@ test("avaliações pausam sem reiniciar e não interferem nas marcas", async ({ 
   await page.mouse.move(1, 1);
   await expect(track).toHaveCSS("animation-play-state", "running");
   await window.hover();
-  await expect(track).toHaveCSS("animation-play-state", "paused");
+  await expect(track).toHaveCSS("animation-play-state", "running");
   const time = () => track.evaluate((el) => Number(el.getAnimations()[0].currentTime));
-  const paused = await time();
-  await page.waitForTimeout(200);
-  expect(Math.abs((await time()) - paused)).toBeLessThan(25);
-  await page.mouse.move(1, 1);
-  await expect.poll(time).toBeGreaterThan(paused + 30);
+  const started = await time();
+  await expect.poll(time).toBeGreaterThan(started + 30);
   await window.focus();
-  await expect(track).toHaveCSS("animation-play-state", "paused");
+  await expect(track).toHaveCSS("animation-play-state", "running");
   await track.evaluate((el) => {
     const animation = el.getAnimations()[0];
     animation.currentTime = Number(animation.effect!.getTiming().duration) * 0.6;
@@ -191,7 +188,7 @@ test("avaliações pausam sem reiniciar e não interferem nas marcas", async ({ 
   expect(result.violations).toEqual([]);
 });
 
-test("toque pausa leitura temporariamente e o autoplay retorna no mobile", async ({ browser }) => {
+test("toque não interrompe o autoplay no mobile", async ({ browser }) => {
   const context = await browser.newContext({
     viewport: { width: 390, height: 844 },
     isMobile: true,
@@ -205,13 +202,10 @@ test("toque pausa leitura temporariamente e o autoplay retorna no mobile", async
   );
   const page = await context.newPage();
   await page.goto("http://127.0.0.1:3100/#avaliacoes");
-  await page.clock.install();
   const carousel = page.locator(".testimonials-carousel");
   await expect(carousel).toBeVisible();
   // O card se move continuamente; um toque real não espera estabilidade geométrica.
   await page.locator(".testimonial-card").first().tap({ force: true });
-  await expect(carousel).toHaveClass(/testimonials-paused/);
-  await page.clock.fastForward(13000);
   await expect(carousel).not.toHaveClass(/testimonials-paused/);
   await expect(page.locator(".testimonials-track")).toHaveCSS("animation-play-state", "running");
   await expect(page.locator(".brands-track")).toHaveCSS("animation-play-state", "running");

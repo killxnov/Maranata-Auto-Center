@@ -148,7 +148,7 @@ Os componentes de reveal, stagger e parallax das seções permanecem separados. 
 
 [seo.config.ts](src/config/seo.config.ts) contém título, descrição e termos locais. [metadata.ts](src/lib/metadata.ts) depende do domínio oficial para canonical e URLs sociais. [structured-data.ts](src/lib/structured-data.ts) produz apenas os dados reais disponíveis no tipo `AutoRepair` e serializa o JSON de forma segura.
 
-Sem domínio configurado, a aplicação evita indexação e não publica URLs oficiais fictícias. Definir o domínio em ambiente de produção e recompilar libera robots, canonical e sitemap. O horário oficial está configurado em texto e na estrutura tipada `openingHoursSpecification`, com cinco dias úteis, abertura às 08:00 e fechamento às 18:00. Notas e avaliações não são geradas.
+A URL oficial padrão é `https://maranata-autocenter.vercel.app`; `NEXT_PUBLIC_SITE_URL` permite trocar o domínio canônico em um único lugar. A indexação depende do ambiente: `VERCEL_TARGET_ENV`/`VERCEL_ENV` têm precedência sobre `NODE_ENV`, bloqueando previews, ambientes customizados e desenvolvimento. Fora da Vercel, uma build de produção com URL HTTPS permite indexação. O sitemap fica vazio nos ambientes não indexáveis. O token opcional `GOOGLE_SITE_VERIFICATION` configura a verificação do Search Console, sem inventar códigos. Recompile após mudar variáveis. O horário oficial está configurado em texto e em `openingHoursSpecification`, com cinco dias úteis, abertura às 08:00 e fechamento às 18:00. Notas e avaliações não são geradas. Consulte [SEO-AUDIT.md](SEO-AUDIT.md) para evidências, resultados e próximos passos externos.
 
 ## Validação e manutenção
 
