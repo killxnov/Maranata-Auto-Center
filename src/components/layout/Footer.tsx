@@ -14,7 +14,7 @@ export function Footer() {
       <Container>
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.3fr_.7fr_1fr]">
           <div>
-            <Brand light />
+            <Brand />
             <p className="mb-6 mt-6 max-w-xs text-xs leading-6 text-white/60">
               Serviços automotivos para nacionais e importados. Fale com a equipe sobre o próximo
               cuidado com o seu carro.
